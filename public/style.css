@@ -1,4 +1,7 @@
 /* Global Styles */
+* {
+    box-sizing: border-box;
+}
 
 :root {
 
@@ -75,10 +78,9 @@ input {
     border: none;
     border-radius: 4px;
     box-shadow: var(--input-shadow);
-    height: 25px;
-    width: 300px;
+    height: 40px;
+    width: 325px;
     max-width: 100%;
-    margin-bottom: 10px;
 }
 
 input:focus {
@@ -87,6 +89,7 @@ input:focus {
 }
 
 #favorites-button {
+    height: 40px;
     padding: 10px 20px;
     background-color: var(--button-bg);
     color: var(--button-text-color);
@@ -112,11 +115,19 @@ input:focus {
 }
 
 #favorites-list li {
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
     background-color: var(--list-bg-color);
     box-shadow: var(--list-shadow);
     padding: 10px 40px;
     margin-bottom: 10px;
     border-radius: 5px;
+}
+
+.remove {
+    padding: 15px;
+    cursor: pointer;
 }
 
 /* Media Queries */
@@ -145,15 +156,15 @@ input:focus {
     main,
     form,
     input {
-        min-width: 90%;
+        min-width: 95%;
     }
 
     #favorites-button {
-        min-width: 90%;
+        min-width: 95%;
     }
 
     #favorites-list {
-        min-width: 90%;
+        min-width: 95%;
     }
 
     #favorites-list li {
@@ -164,7 +175,7 @@ input:focus {
 @media (max-width: 410px) {
 
     input {
-        width: 90%;
+        width: 95%;
     }
 
     #favorites-list li {

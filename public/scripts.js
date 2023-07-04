@@ -19,37 +19,48 @@ load()
 */
 
 function addElement({ name, url }) {
+	// Pegando a lista da página principal
+	const list = document.getElementById("favorites-list");
 
-    // Pegando a lista da página principal
-    const list = document.getElementById("favorites-list");
+	// Criando os elementos HTML
+	const li = document.createElement("li");
+	const divInfo = document.createElement("div");
+	const divRemove = document.createElement("div");
+	const nameElement = document.createElement("p");
+	const urlElement = document.createElement("p");
 
-    // Criando os elementos HTML
-    const li = document.createElement("li");
-    const nameElement = document.createElement("p");
-    const urlElement = document.createElement("p");
+	// Adicionando conteúdo aos elementos HTML
+	nameElement.innerText = name;
+	urlElement.innerText = url;
+	divRemove.innerText = "x";
+	divInfo.classList.add("info");
+	divRemove.classList.add("remove");
 
-    // Adicionando conteúdo aos elementos HTML
-    nameElement.innerText = name;
-    urlElement.innerText = url;
-
-    // Anexando elementos
-    li.append(nameElement, urlElement);
-    list.appendChild(li);
+	// Anexando elementos
+	divInfo.append(nameElement, urlElement);
+	li.append(divInfo, divRemove);
+	list.appendChild(li);
 }
 
 // Mock de dados
 const links = [
-    { name: "Google", url: "https://google.com" },
-    { name: "Instagram", url: "https://instagram.com" },
-    { name: "Facebook", url: "https://facebook.com" },
+	{ name: "Google", url: "https://google.com" },
+	{ name: "Instagram", url: "https://instagram.com" },
+	{ name: "Facebook", url: "https://facebook.com" },
 ];
 
 // Iterando os links e adicionando no frontend
 links.map(({ name, url }) => addElement({ name, url }));
 
-function removeElement(element) {
-	// criem os códigos
-}
+const remove = document.querySelectorAll(".remove");
+
+remove.forEach((item) => {
+	item.addEventListener("click", () => {
+        const li = item.parentNode;
+        if (confirm("Tem certeza que deseja excluir este link?"));
+		li.remove();
+	});
+});
 
 form.addEventListener("submit", (event) => {
 	event.preventDefault();
