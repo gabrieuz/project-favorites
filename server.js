@@ -11,17 +11,15 @@ http.createServer((req, res) => {
 	// res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
 	const extname = path.extname(pathFile);
 	const allowedFileTypes = [".html", ".css", ".js"];
-	const allowed = allowedFileTypes.find((item) => {
-		item == extname;
-	});
+	const allowed = allowedFileTypes.find((item) => item == extname);
 
 	if (!allowed) return;
 
-	fs.readFile(pathFile),
+	fs.readFile(pathFile,
 		(err, data) => {
 			if (err) throw err;
 			res.end(data);
-		};
+		});
 }).listen(5000, () => {
 	console.log("Servidor rodando...");
 });
