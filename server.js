@@ -5,12 +5,9 @@ const path = require("path");
 http.createServer((req, res) => {
 	const file = req.url === "/" ? "index.html" : req.url;
 	const pathFile = path.join(__dirname, "public", file);
-	console.log(file);
-	console.log(pathFile);
 
-	// res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
 	const extname = path.extname(pathFile);
-	const allowedFileTypes = [".html", ".css", ".js"];
+	const allowedFileTypes = [".html", ".css", ".js", ".ico", ".svg"];
 	const allowed = allowedFileTypes.find((item) => item == extname);
 
 	if (!allowed) return;
@@ -21,5 +18,5 @@ http.createServer((req, res) => {
 			res.end(data);
 		});
 }).listen(5000, () => {
-	console.log("Servidor rodando...");
+	console.log("Servidor rodando em http://localhost:5000");
 });
