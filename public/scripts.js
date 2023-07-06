@@ -82,51 +82,55 @@ function listElements(data) {
 		list.appendChild(li);
 
 		// Adicionando evento de click para atualizar o elemento
-		// updateIcon.addEventListener("click", updateElement);
+		updateIcon.addEventListener("click", updateElement);
 		// Adicionando evento de click para remover o elemento
 		removeIcon.addEventListener("click", removeElement);
 	});
 }
 
-// const update = document.querySelectorAll(".update");
+const update = document.querySelectorAll(".update");
 
-// function updateElement(event) {
-// 	const nameElement = event.target.parentNode.parentNode.querySelector(".info p")
-// 	const urlElement = event.target.parentNode.parentNode.querySelector(".info a")
+function updateElement(event) {
+	const nameElement = event.target.parentNode.parentNode.querySelector(".info p")
+	const urlElement = event.target.parentNode.parentNode.querySelector(".info a")
 
-// 	const name = nameElement.id;
-// 	const url = urlElement.innerText;
+	const name = nameElement.id;
+	const url = urlElement.getAttribute("href");
 
-// 	// Transformando o texto do elemento em um texto que possa ser editado
-// 	nameElement.innerHTML = `<input id="newName" type="text" value="${name}">`;
-// 	urlElement.innerHTML = `<input id="newUrl" type="text" value="${url}">`;
-// 	urlElement.removeAttribute("href");
+	console.log(`1 - Nome: ${name} | URL: ${url}`)
 
-// 	// Adicionando botão de atualizar
-// 	event.target.innerText = "save";
-// 	event.target.classList.remove("update");
-// 	event.target.classList.add("save");
-// 	event.target.title = "Salvar";
+	// Transformando o texto do elemento em um texto que possa ser editado
+	nameElement.innerHTML = `<input id="newName" type="text" value="${name}">`;
+	urlElement.innerHTML = `<input id="newUrl" type="text" value="${url}">`;
+	urlElement.removeAttribute("href");
 
-// 	event.target.onclick = () => {
-// 		const newName = nameElement.value;
-// 		const newUrl = urlElement.value;
+	// Adicionando botão de atualizar
+	event.target.innerText = "save";
+	event.target.classList.remove("update");
+	event.target.classList.add("save");
+	event.target.title = "Salvar";
 
-// 		addElement(newName, newUrl);
-// 	}
+	event.target.onclick = () => {
+		const newName = document.getElementById("newName").value;
+		const newUrl = document.getElementById("newUrl").value;
 
-// 	// Removendo item antigo
-// 	fetch(`http://localhost:3000/?name=${encodeURIComponent(name)}&url=${encodeURIComponent(url)}&del=1`)
-// 		.then((response) => {
-// 			if (!response.ok) throw new Error("Ocorreu um erro ao tentar atualizar.");
-// 		})
-// 		.catch((error) => console.error(error));
-// 	showToast("Digite os novos dados e clique em salvar.", "info");
-// }
+		console.log(`2 - Nome: ${newName} | URL: ${newUrl}`)
 
-// update.forEach((item) => {
-// 	item.addEventListener("click", updateElement);
-// });
+		addElement(newName, newUrl);
+	}
+
+	// Removendo item antigo
+	// fetch(`http://localhost:3000/?name=${encodeURIComponent(name)}&url=${encodeURIComponent(url)}&del=1`)
+	// 	.then((response) => {
+	// 		if (!response.ok) throw new Error("Ocorreu um erro ao tentar atualizar.");
+	// 	})
+	// 	.catch((error) => console.error(error));
+	// showToast("Digite os novos dados e clique em salvar.", "info");
+}
+
+update.forEach((item) => {
+	item.addEventListener("click", updateElement);
+});
 
 const remove = document.querySelectorAll(".delete");
 
