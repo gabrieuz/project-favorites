@@ -117,7 +117,7 @@ input:focus {
 #favorites-list li {
     display: flex;
     align-items: center;
-    justify-content:space-between;
+    justify-content: space-between;
     background-color: var(--list-bg-color);
     box-shadow: var(--list-shadow);
     padding: 10px 40px;
@@ -125,9 +125,74 @@ input:focus {
     border-radius: 5px;
 }
 
-.remove {
-    padding: 15px;
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.delete {
+    padding: 10px;
     cursor: pointer;
+    box-shadow: var(--list-shadow);
+    border-radius: 5px;
+}
+
+.delete:hover {
+    background-color: #ff6b6b;
+    color: #fff;
+}
+
+.update {
+    padding: 10px;
+    cursor: pointer;
+    box-shadow: var(--list-shadow);
+    border-radius: 5px;
+}
+
+.update:hover {
+    background-color: #56c957;
+    color: #fff;
+}
+
+.save {
+    padding: 10px;
+    cursor: pointer;
+    box-shadow: var(--list-shadow);
+    border-radius: 5px;
+}
+
+.save:hover {
+    background-color: #6bd4ff;
+    color: #fff;
+}
+
+#toast {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background-color: #333;
+    color: #fff;
+    padding: 12px 16px;
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+#toast.show {
+    opacity: 1;
+}
+
+#toast.error {
+    background-color: #ff6b6b;
+}
+
+#toast.success {
+    background-color: #56c957;
+}
+
+#toast.info {
+    background-color: #6bd4ff;
 }
 
 /* Media Queries */

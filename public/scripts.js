@@ -2,80 +2,184 @@ const ul = document.querySelector("ul");
 const input = document.querySelector("input");
 const form = document.querySelector("form");
 
-/*
-
 // Não se preocupem com esse pedaço de código comentado! Vamos descomentá-lo quando tivermos acabado de construir a API.
 
 // Função que carrega o conteúdo da API.
 async function load() {
-    // fetch está como await para evitar que entre num esquema de promisse e só devolva o conteúdo após a iteração qua acontece em seguida.
-    const res = await fetch('http://localhost:3000/')
-        .then(data => data.json())
-    // Iterando no vetor com o conteúdo (JSON) que está vindo da API e adicionando-os no frontend.
-    res.urls.map(({name, url}) => addElement({name, url}))
+	// fetch está como await para evitar que entre num esquema de promisse e só devolva o conteúdo após a iteração qua acontece em seguida.
+	const res = await fetch("http://localhost:3000/")
+		.then((data) => data.json())
+		// Iterando no vetor com o conteúdo (JSON) que está vindo da API e adicionando-os no frontend.
+		.then((data) => listElements(data));
 }
 
-load()
-*/
+load();
 
-function addElement({ name, url }) {
+// Função que mostra o toast na tela.
+function showToast(message, type) {
+	const toast = document.getElementById("toast");
+	toast.textContent = message;
+	toast.classList.add("show");
+
+	// Remover classes de estilo anteriores
+	toast.classList.remove("error", "success", "info");
+
+	// Adicionar classe de estilo com base no tipo
+	if (type === "error") {
+		toast.classList.add("error");
+	} else if (type === "success") {
+		toast.classList.add("success");
+	} else if (type === "info") {
+		toast.classList.add("info");
+	}
+
+	setTimeout(() => {
+		toast.classList.remove("show");
+	}, 2700);
+}
+
+
+
+// Função que adiciona os elementos no frontend.
+function listElements(data) {
 	// Pegando a lista da página principal
 	const list = document.getElementById("favorites-list");
 
-	// Criando os elementos HTML
-	const li = document.createElement("li");
-	const divInfo = document.createElement("div");
-	const divRemove = document.createElement("div");
-	const nameElement = document.createElement("p");
-	const urlElement = document.createElement("p");
+	list.innerHTML = "";
 
-	// Adicionando conteúdo aos elementos HTML
-	nameElement.innerText = name;
-	urlElement.innerText = url;
-	divRemove.innerText = "x";
-	divInfo.classList.add("info");
-	divRemove.classList.add("remove");
+	// Iterando no vetor com o conteúdo (JSON) que está vindo da API e adicionando-os no frontend.
+	data.urls.forEach((item) => {
+		// Criando os elementos HTML
+		const li = document.createElement("li");
+		const divInfo = document.createElement("div");
+		const nameElement = document.createElement("p");
+		const urlElement = document.createElement("a");
+		const divActions = document.createElement("div");
+		const removeIcon = document.createElement("i");
+		const updateIcon = document.createElement("i");
 
-	// Anexando elementos
-	divInfo.append(nameElement, urlElement);
-	li.append(divInfo, divRemove);
-	list.appendChild(li);
+		// Adicionando conteúdo aos elementos HTML
+		nameElement.innerText = item.name;
+		urlElement.innerText = item.url;
+		removeIcon.innerText = "delete";
+		divInfo.classList.add("info");
+		divActions.classList.add("actions");
+		removeIcon.classList.add("material-icons", "delete");
+		updateIcon.classList.add("material-icons", "update");
+
+		// Adicionando atributos aos elementos HTML
+		urlElement.setAttribute("href", item.url);
+		urlElement.setAttribute("target", "_blank");
+		nameElement.id = item.name;
+		updateIcon.innerText = "edit";
+		removeIcon.title = "Remover";
+		updateIcon.title = "Atualizar";
+
+		// Anexando elementos
+		divInfo.append(nameElement, urlElement);
+		divActions.append(updateIcon, removeIcon);
+		li.append(divInfo, divActions);
+		list.appendChild(li);
+
+		// Adicionando evento de click para atualizar o elemento
+		// updateIcon.addEventListener("click", updateElement);
+		// Adicionando evento de click para remover o elemento
+		removeIcon.addEventListener("click", removeElement);
+	});
 }
 
-// Mock de dados
-const links = [
-	{ name: "Google", url: "https://google.com" },
-	{ name: "Instagram", url: "https://instagram.com" },
-	{ name: "Facebook", url: "https://facebook.com" },
-];
+// const update = document.querySelectorAll(".update");
 
-// Iterando os links e adicionando no frontend
-links.map(({ name, url }) => addElement({ name, url }));
+// function updateElement(event) {
+// 	const nameElement = event.target.parentNode.parentNode.querySelector(".info p")
+// 	const urlElement = event.target.parentNode.parentNode.querySelector(".info a")
 
-const remove = document.querySelectorAll(".remove");
+// 	const name = nameElement.id;
+// 	const url = urlElement.innerText;
+
+// 	// Transformando o texto do elemento em um texto que possa ser editado
+// 	nameElement.innerHTML = `<input id="newName" type="text" value="${name}">`;
+// 	urlElement.innerHTML = `<input id="newUrl" type="text" value="${url}">`;
+// 	urlElement.removeAttribute("href");
+
+// 	// Adicionando botão de atualizar
+// 	event.target.innerText = "save";
+// 	event.target.classList.remove("update");
+// 	event.target.classList.add("save");
+// 	event.target.title = "Salvar";
+
+// 	event.target.onclick = () => {
+// 		const newName = nameElement.value;
+// 		const newUrl = urlElement.value;
+
+// 		addElement(newName, newUrl);
+// 	}
+
+// 	// Removendo item antigo
+// 	fetch(`http://localhost:3000/?name=${encodeURIComponent(name)}&url=${encodeURIComponent(url)}&del=1`)
+// 		.then((response) => {
+// 			if (!response.ok) throw new Error("Ocorreu um erro ao tentar atualizar.");
+// 		})
+// 		.catch((error) => console.error(error));
+// 	showToast("Digite os novos dados e clique em salvar.", "info");
+// }
+
+// update.forEach((item) => {
+// 	item.addEventListener("click", updateElement);
+// });
+
+const remove = document.querySelectorAll(".delete");
+
+function removeElement(event) {
+	if (confirm("Tem certeza que deseja deletar?")) {
+
+		const name = event.target.parentNode.parentNode.querySelector(".info p").id;
+		const url = event.target.parentNode.parentNode.querySelector(".info a").innerText;
+
+		console.log(name, url);
+
+		// Fazendo a requisição para a API para deletar o elemento
+		fetch(`http://localhost:3000/?name=${encodeURIComponent(name)}&url=${encodeURIComponent(url)}&del=1`)
+			.then((response) => {
+				if (!response.ok) throw new Error("Ocorreu um erro ao tentar deletar.");
+				load();
+				showToast("Deletado com sucesso!", "success");
+			})
+			.catch((error) => console.error(error));
+	}
+}
 
 remove.forEach((item) => {
-	item.addEventListener("click", () => {
-        const li = item.parentNode;
-        if (confirm("Tem certeza que deseja excluir este link?"));
-		li.remove();
-	});
+	item.addEventListener("click", removeElement);
 });
+
+function addElement(name, url) {
+	// Fazendo a requisição para a API para cadastrar o novo elemento
+	fetch(`http://localhost:3000/?name=${encodeURIComponent(name)}&url=${encodeURIComponent(url)}`)
+		.then((response) => {
+			if (!response.ok) throw new Error("Ocorreu um erro ao tentar cadastrar.");
+			load();
+			input.value = "";
+			showToast("Cadastrado com sucesso!", "success");
+		})
+		.catch((error) => {
+			console.error(error);
+			showToast("Ocorreu um erro ao tentar cadastrar.", "error");
+		});
+}
 
 form.addEventListener("submit", (event) => {
 	event.preventDefault();
 
 	let { value } = input;
 
-	if (!value) return alert("Preencha o campo!");
+	if (!value) return showToast("Preencha o campo.");
 
 	const [name, url] = value.split(",");
 
-	if (!url) return alert("O texto não está formatado da maneira correta.");
+	if (!url) return showToast("Formate o texto da maneira correta.");
 
-	if (!/^http/.test(url)) return alert("Digite a url da maneira correta.");
+	if (!/^http/.test(url)) return showToast("Digite a url da maneira correta.");
 
-	addElement({ name, url });
-
-	input.value = "";
+	addElement(name, url);
 });

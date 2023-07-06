@@ -5,8 +5,14 @@ const fs = require("fs");
 const path = require("path");
 
 http.createServer((req, res) => {
+
+	res.writeHead(200, {
+		"Access-Control-Allow-Origin": "*",
+	});
+
 	const { name, url, del } = URL.parse(req.url, true).query;
-	if (!name || !url) res.end(JSON.stringify(data));
+	if (!name || !url)
+		return res.end(JSON.stringify(data));
 	if (del) {
 		data.urls = data.urls.filter((item) => item.url != url);
 		return writeFile((message) => res.end(message));
