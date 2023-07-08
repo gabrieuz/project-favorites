@@ -38,8 +38,6 @@ function showToast(message, type) {
 	}, 2700);
 }
 
-
-
 // Função que adiciona os elementos no frontend.
 function listElements(data) {
 	// Pegando a lista da página principal
@@ -71,6 +69,7 @@ function listElements(data) {
 		urlElement.setAttribute("href", item.url);
 		urlElement.setAttribute("target", "_blank");
 		nameElement.id = item.name;
+		urlElement.id = item.url;
 		updateIcon.innerText = "edit";
 		removeIcon.title = "Remover";
 		updateIcon.title = "Atualizar";
@@ -91,41 +90,30 @@ function listElements(data) {
 const update = document.querySelectorAll(".update");
 
 function updateElement(event) {
-	const nameElement = event.target.parentNode.parentNode.querySelector(".info p")
-	const urlElement = event.target.parentNode.parentNode.querySelector(".info a")
+	const favoritesInput = document.getElementById("favorites-input");
+	const favoritesButton = document.getElementById("favorites-button");
+	const nameElement = event.target.parentNode.parentNode.querySelector(".info p");
+	const urlElement = event.target.parentNode.parentNode.querySelector(".info a");
 
 	const name = nameElement.id;
-	const url = urlElement.getAttribute("href");
+	const url = urlElement.id;
 
-	console.log(`1 - Nome: ${name} | URL: ${url}`)
+	favoritesButton.innerText = "Atualizar";
 
-	// Transformando o texto do elemento em um texto que possa ser editado
-	nameElement.innerHTML = `<input id="newName" type="text" value="${name}">`;
-	urlElement.innerHTML = `<input id="newUrl" type="text" value="${url}">`;
-	urlElement.removeAttribute("href");
+	favoritesInput.value = `${name},${url}`;
 
-	// Adicionando botão de atualizar
-	event.target.innerText = "save";
-	event.target.classList.remove("update");
-	event.target.classList.add("save");
-	event.target.title = "Salvar";
-
-	event.target.onclick = () => {
-		const newName = document.getElementById("newName").value;
-		const newUrl = document.getElementById("newUrl").value;
-
-		console.log(`2 - Nome: ${newName} | URL: ${newUrl}`)
-
-		addElement(newName, newUrl);
-	}
+	showToast("Atualize o campo e clique em atualizar.", "info");
 
 	// Removendo item antigo
-	// fetch(`http://localhost:3000/?name=${encodeURIComponent(name)}&url=${encodeURIComponent(url)}&del=1`)
-	// 	.then((response) => {
-	// 		if (!response.ok) throw new Error("Ocorreu um erro ao tentar atualizar.");
-	// 	})
-	// 	.catch((error) => console.error(error));
-	// showToast("Digite os novos dados e clique em salvar.", "info");
+	fetch(`http://localhost:3000/?name=${encodeURIComponent(name)}&url=${encodeURIComponent(url)}&del=1`)
+		.then((response) => {
+			if (!response.ok) throw new Error("Ocorreu um erro ao tentar atualizar.");
+		})
+		.catch((error) => console.error(error));
+
+	favoritesButton.onclick = () => {
+		favoritesButton.innerText = "Salvar";
+	};
 }
 
 update.forEach((item) => {
@@ -136,7 +124,6 @@ const remove = document.querySelectorAll(".delete");
 
 function removeElement(event) {
 	if (confirm("Tem certeza que deseja deletar?")) {
-
 		const name = event.target.parentNode.parentNode.querySelector(".info p").id;
 		const url = event.target.parentNode.parentNode.querySelector(".info a").innerText;
 
@@ -157,14 +144,14 @@ remove.forEach((item) => {
 	item.addEventListener("click", removeElement);
 });
 
-function addElement(name, url) {
+function addElement(name, url, update = false) {
 	// Fazendo a requisição para a API para cadastrar o novo elemento
 	fetch(`http://localhost:3000/?name=${encodeURIComponent(name)}&url=${encodeURIComponent(url)}`)
 		.then((response) => {
 			if (!response.ok) throw new Error("Ocorreu um erro ao tentar cadastrar.");
 			load();
 			input.value = "";
-			showToast("Cadastrado com sucesso!", "success");
+			showToast("Item salvo com sucesso!", "info");
 		})
 		.catch((error) => {
 			console.error(error);

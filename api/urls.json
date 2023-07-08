@@ -1,12 +1,12 @@
 {
   "urls": [
     {
-      "name": "Web Academy",
-      "url": "http://webacademy.com.br"
+      "name": "WebAcademy",
+      "url": "https://webacademy.ufac.br"
     },
     {
-      "name": "teste",
-      "url": "http"
+      "name": "globoAtualizado",
+      "url": "https://globo.com"
     }
   ]
 }
