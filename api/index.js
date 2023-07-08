@@ -1,32 +1,24 @@
-const http = require("http");
-const data = require("./urls.json");
-const URL = require("url");
-const fs = require("fs");
-const path = require("path");
+const express = require("express");
+const app = express();
+app.listen(3000, () => console.log("Servidor rodando em: http://localhost:3000"));
 
-http.createServer((req, res) => {
+app.use(express.json())
+const MongoClient = require("mongodb").MongoClient;
 
-	res.writeHead(200, {
-		"Access-Control-Allow-Origin": "*",
-	});
+MongoClient.connect("mongodb://localhost:27017/favorites", (err, client) => {
+	if (err) throw err;
 
-	const { name, url, del } = URL.parse(req.url, true).query;
-	if (!name || !url)
-		return res.end(JSON.stringify(data));
-	if (del) {
-		data.urls = data.urls.filter((item) => item.url != url);
-		return writeFile((message) => res.end(message));
-	}
+	const db = client.db("items");
 
-    if(name&&url)
-        data.urls.push({ name, url });
-    
-    return writeFile(message => res.end(message))
-}).listen(3000, () => console.log("Servidor rodando em: http://localhost:3000"));
+	db.collection("items")
+		.find()
+		.toArray((err, result) => {
+			if (err) throw err;
 
-function writeFile(cb) {
-	fs.writeFile(path.join(__dirname, "urls.json"), JSON.stringify(data, null, 2), (err) => {
-		if (err) throw err;
-		cb("Operação realizada com sucesso!");
-	});
-}
+			console.log(result);
+		});
+});
+
+// app.get("/", (req, res) => {
+// 	res.json({message: "express!"})
+// });
