@@ -7,10 +7,13 @@ const form = document.querySelector("form");
 // Função que carrega o conteúdo da API.
 async function load() {
 	// fetch está como await para evitar que entre num esquema de promisse e só devolva o conteúdo após a iteração qua acontece em seguida.
-	const res = await fetch("http://localhost:3000/")
+	const res = await fetch("http://localhost:3000", {
+		method: "GET",
+	})
 		.then((data) => data.json())
-		// Iterando no vetor com o conteúdo (JSON) que está vindo da API e adicionando-os no frontend.
-		.then((data) => listElements(data));
+		.then((data) => {
+			listElements(data);
+		});
 }
 
 load();
@@ -46,7 +49,7 @@ function listElements(data) {
 	list.innerHTML = "";
 
 	// Iterando no vetor com o conteúdo (JSON) que está vindo da API e adicionando-os no frontend.
-	data.urls.forEach((item) => {
+	data.forEach((item) => {
 		// Criando os elementos HTML
 		const li = document.createElement("li");
 		const divInfo = document.createElement("div");
