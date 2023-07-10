@@ -1,24 +1,26 @@
 const express = require("express");
 const app = express();
-app.listen(3000, () => console.log("Servidor rodando em: http://localhost:3000"));
+const cors = require("cors");
+require("dotenv").config();
+app.listen(process.env.PORT || 3000, () => console.log(`Server is running on http://localhost:${process.env.PORT}`));
 
-app.use(express.json())
-const MongoClient = require("mongodb").MongoClient;
+app.use(express.json());
+app.use(cors());
 
-MongoClient.connect("mongodb://localhost:27017/favorites", (err, client) => {
-	if (err) throw err;
+const { MongoClient } = require("mongodb");
 
-	const db = client.db("items");
+async function run() {
+	const client = new MongoClient(process.env.MONGODB_URI);
+	await client.connect();
 
-	db.collection("items")
-		.find()
-		.toArray((err, result) => {
-			if (err) throw err;
+	const database = client.db(process.env.DB_NAME);
+	const collection = database.collection("urls");
 
-			console.log(result);
-		});
-});
+	app.get("/", async (req, res) => {
+		const urls = await collection.find({}).toArray();
+		return res.json(urls);
+	});
+}
 
-// app.get("/", (req, res) => {
-// 	res.json({message: "express!"})
-// });
+run().catch(console.dir);
+
