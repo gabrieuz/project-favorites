@@ -6,17 +6,33 @@ const form = document.querySelector("form");
 
 // Função que carrega o conteúdo da API.
 async function load() {
-	// fetch está como await para evitar que entre num esquema de promisse e só devolva o conteúdo após a iteração qua acontece em seguida.
 	const res = await fetch("http://localhost:3000", {
 		method: "GET",
 	})
 		.then((data) => data.json())
 		.then((data) => {
-			listElements(data);
+			const searchInput = document.getElementById("search-input");
+			const searchValue = searchInput.value.toLowerCase();
+
+			const filteredData = data.filter((item) => {
+				const name = item.name.toLowerCase();
+				const url = item.url.toLowerCase();
+				return name.includes(searchValue) || url.includes(searchValue);
+			});
+
+			listElements(filteredData);
 		});
 }
 
 load();
+
+
+// Função de busca por nome ou url.
+const searchInput = document.getElementById("search-input");
+
+searchInput.addEventListener("input", function() {
+    load();
+});
 
 // Função que mostra o toast na tela.
 function showToast(message, type) {
