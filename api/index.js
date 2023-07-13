@@ -20,7 +20,22 @@ async function run() {
 		const urls = await collection.find({}).toArray();
 		return res.json(urls);
 	});
+
+	app.post("/", async (req, res) => {
+		const { name, url } = req.body;
+
+		if (!name || !url) {
+			return res.status(400).json({
+				message: "Name and url are required!",
+			});
+		}
+
+		const obj = { name, url };
+
+		const result = await collection.insertOne(obj);
+
+		return res.json(result.ops[0]);
+	});
 }
 
 run().catch(console.dir);
-

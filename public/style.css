@@ -197,7 +197,7 @@ input:focus {
 
 /* Media Queries */
 
-@media (max-width: 600px) {
+@media (max-width: 480px) {
 
     body,
     html {
@@ -224,16 +224,20 @@ input:focus {
         min-width: 95%;
     }
 
-    #favorites-button {
-        min-width: 95%;
-    }
-
     #favorites-list {
         min-width: 95%;
     }
 
     #favorites-list li {
         padding: 10px;
+    }
+
+    .menu {
+        display: flex;
+    }
+
+    #form {
+        display: flex;
     }
 }
 

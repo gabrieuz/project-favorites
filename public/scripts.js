@@ -163,9 +163,15 @@ remove.forEach((item) => {
 	item.addEventListener("click", removeElement);
 });
 
-function addElement(name, url, update = false) {
+function addElement(name, url) {
 	// Fazendo a requisição para a API para cadastrar o novo elemento
-	fetch(`http://localhost:3000/?name=${encodeURIComponent(name)}&url=${encodeURIComponent(url)}`)
+	fetch(`http://localhost:3000/`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ name, url }),
+	})
 		.then((response) => {
 			if (!response.ok) throw new Error("Ocorreu um erro ao tentar cadastrar.");
 			load();
