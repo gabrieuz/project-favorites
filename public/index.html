@@ -32,30 +32,43 @@
         		C411.398,171.405,413.097,164.521,411.059,158.251z" />
             </g>
         </svg>
-        <h2>Logo</h2>
+        <h2>Favoritos</h2>
     </div>
     <div class="menu">
         <input type="text" id="search-input" placeholder="Buscar por URL ou nome...">
-        <span class="material-icons">menu</span>
+        <i class="material-icons" id="menu-icon">menu</i>
     </div>
-    <br>
-    <form id="form">
-        <input type="text" id="favorites-input" placeholder="Digite o nome e o endereço separados por vírgula...">
-        <button id="favorites-button">+</button>
-    </form>
+    <div class="tools">
+        <nav class="menu-items">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Sobre</a></li>
+                <li class="font-size">
+                    <i class="material-icons">text_increase</i>
+                    <i class="material-icons">text_decrease</i>
+                </li>
+            </ul>
+        </nav>
+        <form id="form-add">
+            <input type="text" id="favorites-input" placeholder="Digite o nome e o endereço separados por vírgula...">
+            <button class="material-icons" id="favorites-button">add_box</button>
+        </form>
+    </div>
 </header>
 
 <body>
     <div id="toast" class="hide"></div>
     <main>
         <ul id="favorites-list"></ul>
-        <section>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam, modi illo fugiat quod consequatur placeat est, voluptatum saepe fugit ab dolore, vel beatae sapiente quo officiis! Nisi culpa ratione sunt!
-        </section>
+        <aside id="about">
+            Bem-vindo ao nosso site de favoritos! Aqui você pode salvar e organizar seus links favoritos em uma lista
+            personalizada. Com apenas alguns cliques, você pode salvar o nome e a URL do link e acessá-los facilmente
+            sempre que quiser. Experimente agora e mantenha todos os seus links importantes ao seu alcance!
+        </aside>
     </main>
 </body>
 <footer>
-    logo - (68) 98547-89236
+    &copy; Favoritos | (68) 98547-89236 | email@favoritos.com.br
 </footer>
 
 </html>

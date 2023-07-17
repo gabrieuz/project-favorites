@@ -36,6 +36,31 @@ async function run() {
 
 		return res.json(result.ops[0]);
 	});
+
+	app.put("/:id", async (req, res) => {
+		const { id } = req.params;
+		const { name, url } = req.body;
+
+		if (!name || !url) {
+			return res.status(400).json({
+				message: "Name and url are required!",
+			});
+		}
+
+		const obj = { name, url };
+
+		const result = await collection.findOneAndUpdate({ _id: id }, { $set: obj }, { returnOriginal: false });
+
+		return res.json(result.value);
+	});
+
+	app.delete("/:id", async (req, res) => {
+		const { id } = req.params;
+
+		await collection.deleteOne({ _id: id });
+
+		return res.status(204).send();
+	});
 }
 
 run().catch(console.dir);
