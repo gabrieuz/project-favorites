@@ -1,6 +1,6 @@
 const ul = document.querySelector("ul");
-const input = document.querySelector("input");
-const form = document.querySelector("form");
+const formAdd = document.getElementById("form-add");
+const inputAdd = document.getElementById("favorites-input");
 
 const host = `http://${window.location.hostname}:3000`;
 
@@ -184,6 +184,7 @@ function removeElement(event) {
 			method: "DELETE",
 		})
 			.then((response) => {
+				console.log(response);
 				if (!response.ok) throw new Error("Ocorreu um erro ao tentar deletar.");
 				load();
 				showToast("Deletado com sucesso!", "success");
@@ -206,9 +207,10 @@ function addElement(name, url) {
 		body: JSON.stringify({ name, url }),
 	})
 		.then((response) => {
+			console.log(response);
 			if (!response.ok) throw new Error("Ocorreu um erro ao tentar cadastrar.");
 			load();
-			input.value = "";
+			inputAdd.value = "";
 			showToast("Item salvo com sucesso!", "info");
 		})
 		.catch((error) => {
@@ -217,10 +219,10 @@ function addElement(name, url) {
 		});
 }
 
-form.addEventListener("submit", (event) => {
+formAdd.addEventListener("submit", (event) => {
 	event.preventDefault();
 
-	let { value } = input;
+	let { value } = inputAdd;
 
 	if (!value) return showToast("Preencha o campo.");
 
@@ -248,3 +250,24 @@ menuIcon.addEventListener("click", () => {
 		menuIcon.innerText = "menu_open";
 	}
 });
+
+// Aumenta o tamanho da fonte
+function increaseFontSize() {
+	const currentFontSize = parseInt(document.body.style.fontSize) || 16;
+	const newFontSize = currentFontSize + 2;
+	document.body.style.fontSize = newFontSize + "px";
+}
+
+// Diminui o tamanho da fonte
+function decreaseFontSize() {
+  const currentFontSize = parseInt(document.body.style.fontSize) || 16;
+  const newFontSize = currentFontSize - 2;
+  document.body.style.fontSize = newFontSize + "px";
+}
+
+// Adiciona os eventos de click nos ícones de aumentar e diminuir a fonte
+const increaseIcon = document.getElementById("increase-font");
+const decreaseIcon = document.getElementById("decrease-font");
+
+increaseIcon.addEventListener("click", increaseFontSize);
+decreaseIcon.addEventListener("click", decreaseFontSize);
