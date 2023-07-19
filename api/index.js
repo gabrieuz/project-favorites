@@ -7,7 +7,8 @@ app.listen(process.env.PORT || 3000, () => console.log(`Server is running on htt
 app.use(express.json());
 app.use(cors());
 
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
+
 
 async function run() {
 	const client = new MongoClient(process.env.MONGODB_URI);
@@ -34,11 +35,12 @@ async function run() {
 
 		const result = await collection.insertOne(obj);
 
-		return res.json(result.ops[0]);
+		return res.json(result);
 	});
 
 	app.put("/:id", async (req, res) => {
 		const { id } = req.params;
+		const objectId = new ObjectId(id);
 		const { name, url } = req.body;
 
 		if (!name || !url) {
@@ -49,15 +51,23 @@ async function run() {
 
 		const obj = { name, url };
 
-		const result = await collection.findOneAndUpdate({ _id: id }, { $set: obj }, { returnOriginal: false });
+		const result = await collection.findOneAndUpdate({ _id: objectId }, { $set: obj }, { returnOriginal: false });
 
-		return res.json(result.value);
+		return res.json(result);
 	});
 
 	app.delete("/:id", async (req, res) => {
 		const { id } = req.params;
 
-		await collection.deleteOne({ _id: id });
+		const objectId = new ObjectId(id);
+
+		const result = await collection.deleteOne({ _id: objectId });
+
+		if (result.deletedCount === 0) {
+			return res.status(400).json({
+				message: "Não foi possível deletar o item.",
+			});
+		}
 
 		return res.status(204).send();
 	});
